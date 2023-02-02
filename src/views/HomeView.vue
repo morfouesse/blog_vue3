@@ -4,8 +4,8 @@ import {useRouter} from "vue-router";
 import {Route} from "@/constants/route";
 
 const router = useRouter();
-function goToSurvey(): void {
-  router.push(Route.SURVEYS);
+function goToPosts(): void {
+  router.push(Route.POSTS);
 }
 function goToHome(): void {
   router.push(Route.HOME);
@@ -31,13 +31,11 @@ function goToAbout(): void {
       <nav>
         <a @click="goToHome">Home</a>
         <a @click="goToAbout">About</a>
-        <a @click="goToSurvey">Questionnaires</a>
+        <a @click="goToPosts">Le blog</a>
       </nav>
     </div>
   </header>
-<div v-if="router.currentRoute.value.fullPath !== Route.HOME">
-  <RouterView />
-</div>
+
 </template>
 
 <style scoped>
