@@ -4,6 +4,7 @@ import {useRouter} from "vue-router";
 import {Route} from "@/constants/route";
 
 const router = useRouter();
+
 function goToPosts(): void {
   router.push(Route.POSTS);
 }
@@ -14,9 +15,8 @@ function goToAbout(): void {
   router.push(Route.ABOUT);
 }
 </script>
-
 <template>
-  <header>
+  <main>
     <img
       alt="Vue logo"
       class="logo"
@@ -34,15 +34,19 @@ function goToAbout(): void {
         <a @click="goToPosts">Le blog</a>
       </nav>
     </div>
-  </header>
+  </main>
 
 </template>
 
-<style scoped>
-header {
+<style scoped lang="less">
+main {
+  flex-wrap: wrap;
+  flex-direction: row;
+  gap: 20px;
+  display: flex;
+  justify-content: center;
   line-height: 1.5;
-  max-height: 100vh;
-}
+
 
 .logo {
   display: block;
@@ -100,5 +104,6 @@ nav a:first-of-type {
     padding: 1rem 0;
     margin-top: 1rem;
   }
+}
 }
 </style>

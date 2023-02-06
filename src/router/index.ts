@@ -10,6 +10,16 @@ const router = createRouter({
       component: HomeView,
     },
     {
+      path: "/editPost",
+      name: "editPost",
+      component: () => import("../views/EditPostView.vue"),
+    },
+    {
+      path: "/deletePost",
+      name: "deletePost",
+      component: () => import("../views/DeletePostView.vue"),
+    },
+    {
       path: "/posts",
       name: "posts",
       component: () => import("../views/PostsView.vue"),

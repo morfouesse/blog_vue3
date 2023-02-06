@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import OpacityWordingAnim from "@/components/opacityWordingAnim.vue";
+import OpacityWordingAnim from "@/components/OpacityWordingAnim.vue";
 import {ref} from "vue";
 
 const ABOUT = ref("Bienvenuuuue !");
