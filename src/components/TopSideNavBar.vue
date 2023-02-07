@@ -35,11 +35,11 @@ function goToAbout(): void {
         </ui-drawer-header>
         <ui-drawer-content>
           <ui-nav>
-            <ui-nav-item @click="goToHome">Home
+            <ui-nav-item href="#" @click="goToHome">Home
             </ui-nav-item>
-            <ui-nav-item @click="goToPosts">Les posts !
+            <ui-nav-item href="#" @click="goToPosts">Les posts !
             </ui-nav-item>
-            <ui-nav-item @click="goToAbout">A propos
+            <ui-nav-item href="#" @click="goToAbout">A propos
             </ui-nav-item>
           </ui-nav>
         </ui-drawer-content>

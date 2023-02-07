@@ -15,7 +15,7 @@ let loading = true;
 getPosts();
 
 async function getPosts(): Promise<void> {
-  await blogSvc.posts().then((response) => {
+  await blogSvc.getPosts().then((response) => {
     postsNumber.value = response.data.length;
     // je simule une requete lourde
     setTimeout(() => {
@@ -30,27 +30,36 @@ async function getPosts(): Promise<void> {
 </script>
 
 <template>
+  <div class="flex-content">
+
     <opacity-wording-anim :text="postTitle"></opacity-wording-anim>
     <div class="post-list">
-    <div v-if="loading">...Loading</div>
+      <div v-if="loading">...Loading</div>
       <div v-for="post in posts.slice(0, 6)" :key="post.id">
         <div class="post">
-        <post-card :title="post.title"></post-card>
+          <post-card :title="post.title"></post-card>
         </div>
       </div>
     </div>
+  </div>
 </template>
 
 <style scoped lang="less">
+.flex-content {
+  flex-direction: column;
+  display: flex;
+  align-items: center;
 
   .post-list {
-  padding-top: 50px;
+    padding-top: 50px;
     flex-wrap: wrap;
     display: flex;
     justify-content: center;
-    .post{
+
+    .post {
       margin: 10px;
     }
   }
+}
 
 </style>

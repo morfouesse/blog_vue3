@@ -1,16 +1,16 @@
 <script setup lang="ts">
-  import {Route} from "@/constants/route";
-  import {useRouter} from "vue-router";
+import { Route } from "@/constants/route";
+import { useRouter } from "vue-router";
 
-  defineProps(["title"]);
-  const router = useRouter();
-  function goToEditPost(): void {
-    router.push(Route.EDIT_POST);
-  }
+defineProps(["postTitle"]);
+const router = useRouter();
+function goToEditPost(): void {
+  router.push(Route.EDIT_POST);
+}
 
-  function goToDeletePost(): void {
-    router.push(Route.DELETE_POST);
-  }
+function goToDeletePost(): void {
+  router.push(Route.DELETE_POST);
+}
 </script>
 <template>
   <ui-card class="demo-card-photo">
@@ -18,7 +18,7 @@
       <ui-card-media square class="demo-card-media">
         <ui-card-media-content class="demo-card-title">
           <div class="demo-card-media-title">
-           {{ title }}
+            {{ postTitle }}
           </div>
         </ui-card-media-content>
       </ui-card-media>
@@ -37,7 +37,7 @@
 }
 
 .demo-card-media {
-  background-image: url('../assets/logo.svg');
+  background-image: url("../assets/logo.svg");
 }
 
 .demo-card-title {
@@ -50,8 +50,8 @@
   font-size: 20px;
   padding: 20px 16px;
   background-image: linear-gradient(
-      rgba(0, 0, 0, 0) 0%,
-      rgba(0, 0, 0, 0.6) 100%
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.6) 100%
   );
   color: white;
 }

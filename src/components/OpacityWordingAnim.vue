@@ -11,9 +11,6 @@ defineProps(["text"]);
 @opacity-dur: 1000ms;
 
 div {
-  flex-direction: column;
-  display: flex;
-  align-items: center;
   transform-origin: left;
   animation: opacity-anim @opacity-dur;
   h1 {
