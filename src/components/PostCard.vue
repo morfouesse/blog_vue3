@@ -2,7 +2,7 @@
 import { Route } from "@/constants/route";
 import { useRouter } from "vue-router";
 
-defineProps(["postTitle"]);
+defineProps(["postTitle", "postBody"]);
 const router = useRouter();
 function goToEditPost(): void {
   router.push(Route.EDIT_POST);
@@ -22,6 +22,9 @@ function goToDeletePost(): void {
           </div>
         </ui-card-media-content>
       </ui-card-media>
+      <div class="demo-card-subtitle">
+       {{ postBody }}
+      </div>
     </ui-card-content>
     <ui-card-actions>
       <ui-card-icons>
@@ -44,6 +47,10 @@ function goToDeletePost(): void {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+}
+
+.demo-card-subtitle{
+  margin: 10px;
 }
 
 .demo-card-media-title {

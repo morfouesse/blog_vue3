@@ -37,7 +37,7 @@ async function getPosts(): Promise<void> {
       <div v-if="loading">...Loading</div>
       <div v-for="post in posts.slice(0, 6)" :key="post.id">
         <div class="post">
-          <post-card :title="post.title"></post-card>
+          <post-card :post-title="post.title" :post-body="post.body"></post-card>
         </div>
       </div>
     </div>
