@@ -1,4 +1,4 @@
 export enum Endpoints{
-    GET_POSTS = "https://jsonplaceholder.typicode.com/posts",
-    PUT_POSTS = "https://jsonplaceholder.typicode.com/posts/{post}"
+    GET_POSTS = "https://my-json-server.typicode.com/morfouesse/blog_vue3/posts",
+    PUT_POSTS = "https://my-json-server.typicode.com/morfouesse/blog_vue3/posts/{post}"
 }
