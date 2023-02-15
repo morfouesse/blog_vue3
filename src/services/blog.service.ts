@@ -10,7 +10,10 @@ export class BlogService {
   public async putPost(post: Post): Promise<AxiosResponse<Post>>{
     return await axios.put(
       Endpoints.PUT_POSTS.replace("{post}", String(post.id)),
-      post
+      post,
+        {
+          headers: {"content-type": "application/json"}
+        }
     );
   }
 }

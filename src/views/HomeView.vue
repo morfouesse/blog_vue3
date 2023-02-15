@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import HelloWorld from "@/components/HelloWorld.vue";
 import {useRouter} from "vue-router";
-import {Route} from "@/constants/route";
+import {RoutePath} from "@/constants/routePath";
 
 const router = useRouter();
 
 function goToPosts(): void {
-  router.push(Route.POSTS);
+  router.push(RoutePath.POSTS);
 }
 function goToHome(): void {
-  router.push(Route.HOME);
+  router.push(RoutePath.HOME);
 }
 function goToAbout(): void {
-  router.push(Route.ABOUT);
+  router.push(RoutePath.ABOUT);
 }
 </script>
 <template>

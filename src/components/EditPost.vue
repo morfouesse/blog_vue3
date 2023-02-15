@@ -5,10 +5,13 @@ import type {Post} from "@/constants/models";
 import PostCard from "@/components/PostCard.vue";
 import {BlogService} from "@/services/blog.service";
 import {useRouter} from "vue-router";
-import {Route} from "@/constants/route";
+import {RoutePath} from "@/constants/routePath";
+import moment from "moment";
+import {UtilsService} from "@/services/utils.service";
 
 const router = useRouter();
 const blogSvc = new BlogService();
+const utilsSvc = new UtilsService();
 const pageTitle = ref("change ton post !");
 const postTitle = ref("Titre");
 const postBody = ref("Description");
@@ -16,13 +19,15 @@ const postButton = ref("Modifier");
 
 const post = ref<Post>(
     {
+      id: Number(router.currentRoute.value.params.post),
       title: "",
-      body: ""
+      body: "",
+      createdIn: moment().format(utilsSvc.formatDateHourSecond())
     });
 
 function modifyPost() {
   blogSvc.putPost(post.value);
-  router.push(Route.POSTS);
+  router.push(RoutePath.POSTS);
 }
 
 </script>
@@ -54,7 +59,7 @@ function modifyPost() {
         </form>
       </div>
       <div>
-        <PostCard :post-title="post.title" :post-body="post.body"></PostCard>
+        <PostCard :post="post"></PostCard>
       </div>
     </div>
   </div>

@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import {ref} from "vue";
-import {Route} from "@/constants/route";
+import {RoutePath} from "@/constants/routePath";
 import {useRouter} from "vue-router";
 const type = ref(0);
 const title = ref("wwoooooaaw");
 const openDrawer = ref(false);
 const router = useRouter();
 function goToPosts(): void {
-  router.push(Route.POSTS);
+  router.push(RoutePath.POSTS);
 }
 function goToHome(): void {
-  router.push(Route.HOME);
+  router.push(RoutePath.HOME);
 }
 function goToAbout(): void {
-  router.push(Route.ABOUT);
+  router.push(RoutePath.ABOUT);
 }
 </script>
 <template>

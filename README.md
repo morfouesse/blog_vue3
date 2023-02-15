@@ -44,3 +44,14 @@ npm run build
 ```sh
 npm run lint
 ```
+
+### Mockend with json-server
+
+```sh
+npm install -g json-server
+```
+
+### launch locally to use HTTP methods
+```sh
+json-server --watch db.json
+```

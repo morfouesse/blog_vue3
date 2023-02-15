@@ -1,31 +1,32 @@
 import {createRouter, createWebHistory} from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import {RoutePath} from "@/constants/routePath";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: "/",
+      path: RoutePath.HOME,
       name: "home",
       component: HomeView,
     },
     {
-      path: "/editPost",
+      path: RoutePath.EDIT_POST,
       name: "editPost",
       component: () => import("../views/EditPostView.vue"),
     },
     {
-      path: "/deletePost",
+      path: RoutePath.DELETE_POST,
       name: "deletePost",
       component: () => import("../views/DeletePostView.vue"),
     },
     {
-      path: "/posts",
+      path: RoutePath.POSTS,
       name: "posts",
       component: () => import("../views/PostsView.vue"),
     },
     {
-      path: "/about",
+      path: RoutePath.ABOUT,
       name: "about",
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route

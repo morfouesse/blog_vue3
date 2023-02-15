@@ -4,8 +4,9 @@ import OpacityWordingAnim from "@/components/OpacityWordingAnim.vue";
 import {BlogService} from "@/services/blog.service";
 import type {Post} from "@/constants/models";
 import PostCard from "@/components/PostCard.vue";
+import moment from "moment";
 
-const blogSvc: BlogService = new BlogService();
+const blogSvc = new BlogService();
 const postTitle = ref("Les Poooosts !");
 const posts = ref<Post[]>([]);
 const postsNumber = ref(0);
@@ -19,7 +20,9 @@ async function getPosts(): Promise<void> {
     postsNumber.value = response.data.length;
     // je simule une requete lourde
     setTimeout(() => {
-      posts.value = response.data;
+      posts.value = response.data.sort((a,b) =>
+        moment(b.createdIn).diff(a.createdIn)
+      );
     }, 1500);
   });
   if (posts.value) {
@@ -37,7 +40,7 @@ async function getPosts(): Promise<void> {
       <div v-if="loading">...Loading</div>
       <div v-for="post in posts" :key="post.id">
         <div class="post">
-          <post-card :post-title="post.title" :post-body="post.body"></post-card>
+          <post-card :post="post"></post-card>
         </div>
       </div>
     </div>

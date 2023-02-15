@@ -1,15 +1,25 @@
 <script setup lang="ts">
-import { Route } from "@/constants/route";
-import { useRouter } from "vue-router";
+import { RoutePath } from "@/constants/routePath";
+import { useRoute, useRouter } from "vue-router";
 
-defineProps(["postTitle", "postBody"]);
+const props = defineProps(["post"]);
 const router = useRouter();
 function goToEditPost(): void {
-  router.push(Route.EDIT_POST);
+  router.push({
+    name: "editPost",
+    params: {
+      post: props.post.id,
+    },
+  });
 }
 
 function goToDeletePost(): void {
-  router.push(Route.DELETE_POST);
+  router.push({
+    path: RoutePath.DELETE_POST,
+    params: {
+      post: props.post.id,
+    },
+  });
 }
 </script>
 <template>
@@ -18,12 +28,12 @@ function goToDeletePost(): void {
       <ui-card-media square class="demo-card-media">
         <ui-card-media-content class="demo-card-title">
           <div class="demo-card-media-title">
-            {{ postTitle }}
+            {{ post.title }}
           </div>
         </ui-card-media-content>
       </ui-card-media>
       <div class="demo-card-subtitle">
-       {{ postBody }}
+        {{ post.body }}
       </div>
     </ui-card-content>
     <ui-card-actions>
@@ -49,8 +59,10 @@ function goToDeletePost(): void {
   justify-content: flex-end;
 }
 
-.demo-card-subtitle{
+.demo-card-subtitle {
   margin: 10px;
+  overflow: hidden;
+  height: 50px;
 }
 
 .demo-card-media-title {
