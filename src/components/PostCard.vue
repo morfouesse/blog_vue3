@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { RoutePath } from "@/constants/routePath";
 import { useRoute, useRouter } from "vue-router";
+import {BlogService} from "@/services/blog.service";
 
 const props = defineProps(["post"]);
 const router = useRouter();
+const blogSvc = new BlogService();
 function goToEditPost(): void {
   router.push({
     name: "editPost",
@@ -14,12 +16,8 @@ function goToEditPost(): void {
 }
 
 function goToDeletePost(): void {
-  router.push({
-    path: RoutePath.DELETE_POST,
-    params: {
-      post: props.post.id,
-    },
-  });
+ blogSvc.deletePostById(props.post.id);
+location.reload();
 }
 </script>
 <template>

@@ -1,42 +1,92 @@
-<script setup lang="ts">
+<!--<script setup lang="ts">-->
+<!--import OpacityWordingAnim from "@/components/OpacityWordingAnim.vue";-->
+<!--import {ref} from "vue";-->
+<!--import type {Post} from "@/constants/models";-->
+<!--import PostCard from "@/components/PostCard.vue";-->
+<!--import {BlogService} from "@/services/blog.service";-->
+<!--import {useRouter} from "vue-router";-->
+<!--import {RoutePath} from "@/constants/routePath";-->
+<!--import moment from "moment";-->
+
+<!--const router = useRouter();-->
+<!--const blogSvc = new BlogService();-->
+<!--const pageTitle = ref("change ton post !");-->
+<!--const postTitle = ref("Titre");-->
+<!--const postBody = ref("Description");-->
+<!--const postButton = ref("Modifier");-->
+
+<!--const post = ref<Post>(-->
+<!--    {-->
+<!--      id: Number(router.currentRoute.value.params.post),-->
+<!--      title: "",-->
+<!--      body: "",-->
+<!--      createdIn: moment().format()-->
+<!--    });-->
+
+<!--function modifyPost(): void {-->
+<!--  blogSvc.putPost(post.value);-->
+<!--  router.push(RoutePath.POSTS);-->
+<!--}-->
+
+<!--// function getPostById(): void{-->
+<!--//    blogSvc.getPostById(Number(router.currentRoute.value.params.post)).then(-->
+<!--//        post => post = post.data-->
+<!--//    );-->
+<!--// }-->
+
+<!--</script>-->
+
+<script lang="ts">
 import OpacityWordingAnim from "@/components/OpacityWordingAnim.vue";
-import {ref} from "vue";
-import type {Post} from "@/constants/models";
-import PostCard from "@/components/PostCard.vue";
 import {BlogService} from "@/services/blog.service";
-import {useRouter} from "vue-router";
-import {RoutePath} from "@/constants/routePath";
+import {defineComponent, ref} from "vue";
+import type {Post} from "@/constants/models";
 import moment from "moment";
+import {RoutePath} from "@/constants/routePath";
+import PostCard from "@/components/PostCard.vue";
 import {UtilsService} from "@/services/utils.service";
 
-const router = useRouter();
 const blogSvc = new BlogService();
 const utilsSvc = new UtilsService();
-const pageTitle = ref("change ton post !");
-const postTitle = ref("Titre");
-const postBody = ref("Description");
-const postButton = ref("Modifier");
-
-const post = ref<Post>(
-    {
-      id: Number(router.currentRoute.value.params.post),
-      title: "",
-      body: "",
-      createdIn: moment().format(utilsSvc.formatDateHourSecond())
-    });
-
-function modifyPost() {
-  blogSvc.putPost(post.value);
-  router.push(RoutePath.POSTS);
-}
-
+export default defineComponent({
+  components: {PostCard, OpacityWordingAnim},
+  data() {
+    return {
+      pageTitle: "change ton post !",
+      postTitle: "Titre",
+      postBody: "Description",
+      postButton: "Modifier",
+      post: ref<Post>( {
+        id: Number(this.$router.currentRoute.value.params.post),
+        title: "",
+        body: "",
+        createdIn: "",
+      }).value,
+    };
+  },
+  created() {
+    this.post = this.getPostById();
+  },
+  methods: {
+    modifyPost() {
+      this.post.createdIn = moment().format(utilsSvc.formatDateHourSecond());
+      blogSvc.putPost(this.post);
+      this.$router.push(RoutePath.POSTS);
+    },
+    getPostById() {
+      blogSvc.getPostById(Number(this.$router.currentRoute.value.params.post)).then(
+          post => this.post = post.data
+      );
+      return this.post;
+    }
+  }
+})
 </script>
 
 <template>
   <div class="column-content">
-
     <opacity-wording-anim :text="pageTitle"></opacity-wording-anim>
-    <div class="row-content">
+    <div class="row-content" v-if="post">
       <div class="flex-form">
         <form>
           <div class="inputs">
@@ -46,13 +96,24 @@ function modifyPost() {
               </ui-textfield>
             </div>
             <div class="input input-description">
-              <ui-textfield input-type="textarea" rows="4" cols="25" v-model="post.body" outlined>
+              <ui-textfield
+                  input-type="textarea"
+                  rows="4"
+                  cols="25"
+                  v-model="post.body"
+                  outlined
+              >
                 {{ postBody }}
               </ui-textfield>
             </div>
             <div class="button">
-              <ui-button raised :disabled="post.title.length === 0 || post.body.length === 0">
-                <span @click="modifyPost" class="button-text"> {{ postButton }} </span>
+              <ui-button
+                  raised
+                  :disabled="post.title.length === 0 || post.body.length === 0"
+              >
+                <span @click="modifyPost" class="button-text">
+                  {{ postButton }}
+                </span>
               </ui-button>
             </div>
           </div>

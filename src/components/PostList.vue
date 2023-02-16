@@ -15,19 +15,16 @@ let loading = true;
 
 getPosts();
 
-async function getPosts(): Promise<void> {
-  await blogSvc.getPosts().then((response) => {
+function getPosts(): void {
+  blogSvc.getPosts().then((response) => {
     postsNumber.value = response.data.length;
-    // je simule une requete lourde
-    setTimeout(() => {
-      posts.value = response.data.sort((a,b) =>
-        moment(b.createdIn).diff(a.createdIn)
-      );
-    }, 1500);
+    posts.value = response.data.sort((a, b) =>
+        moment(b.createdIn).diff(moment(a.createdIn))
+    );
+    if (posts.value) {
+      loading = false;
+    }
   });
-  if (posts.value) {
-    loading = false;
-  }
 }
 
 </script>

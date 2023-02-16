@@ -18,6 +18,6 @@ export class UtilsService {
   }
 
   public formatDateHourSecond(): string {
-    return "DD/MM/YYYY hh:mm:ss";
+    return "YYYY-MM-DD HH:mm:ss";
   }
 }

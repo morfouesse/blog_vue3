@@ -16,11 +16,6 @@ const router = createRouter({
       component: () => import("../views/EditPostView.vue"),
     },
     {
-      path: RoutePath.DELETE_POST,
-      name: "deletePost",
-      component: () => import("../views/DeletePostView.vue"),
-    },
-    {
       path: RoutePath.POSTS,
       name: "posts",
       component: () => import("../views/PostsView.vue"),
