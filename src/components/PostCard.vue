@@ -62,7 +62,7 @@ export default defineComponent({
 
 <template>
   <ui-card class="demo-card-photo">
-    <ui-card-content>
+    <ui-card-content :class="{ 'new-post': isNewPost }">
       <ui-card-media square class="demo-card-media">
         <ui-card-media-content class="demo-card-title">
           <div class="demo-card-media-title">
@@ -70,13 +70,13 @@ export default defineComponent({
           </div>
         </ui-card-media-content>
       </ui-card-media>
-      <div class="demo-card-subtitle">
+      <div class="demo-card-subtitle" :class="{'new-post-body': isNewPost}">
         {{ post.body }}
       </div>
     </ui-card-content>
     <ui-card-actions>
       <div v-if="isNewPost">
-        <ui-chip icon="info">Nouveau post</ui-chip>
+        <ui-chip icon="info" class="new-post-chip">Nouveau post</ui-chip>
       </div>
       <ui-card-icons>
         <ui-icon-button @click="goToEditPost" icon="edit"></ui-icon-button>
@@ -86,8 +86,18 @@ export default defineComponent({
   </ui-card>
 </template>
 <style scoped lang="less">
+
+  .new-post{
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 16%, rgba(9,9,121,1) 43%, rgba(50,50,226,1) 68%);
+    .new-post-chip{
+      background-color: #0A00FFF9;
+
+    }
+  }
 .demo-card-photo {
   width: 300px;
+
 }
 
 .demo-card-media {
@@ -100,6 +110,9 @@ export default defineComponent({
   justify-content: flex-end;
 }
 
+  .new-post-body{
+    color: white;
+  }
 .demo-card-subtitle {
   margin: 10px;
   overflow: hidden;
