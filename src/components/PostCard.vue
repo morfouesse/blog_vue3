@@ -1,25 +1,65 @@
-<script setup lang="ts">
-import { RoutePath } from "@/constants/routePath";
-import { useRoute, useRouter } from "vue-router";
+<!--<script setup lang="ts">-->
+<!--import { RoutePath } from "@/constants/routePath";-->
+<!--import { useRoute, useRouter } from "vue-router";-->
+<!--import {BlogService} from "@/services/blog.service";-->
+
+<!--const props = defineProps(["post"]);-->
+<!--const router = useRouter();-->
+<!--const blogSvc = new BlogService();-->
+<!--function goToEditPost(): void {-->
+<!--  router.push({-->
+<!--    name: "editPost",-->
+<!--    params: {-->
+<!--      post: props.post.id,-->
+<!--    },-->
+<!--  });-->
+<!--}-->
+
+<!--function goToDeletePost(): void {-->
+<!-- blogSvc.deletePostById(props.post.id);-->
+<!--location.reload();-->
+<!--}-->
+<!--</script>-->
+
+<script lang="ts">
+import {defineComponent} from "vue";
+import {useRouter} from "vue-router";
 import {BlogService} from "@/services/blog.service";
+import moment from "moment";
 
-const props = defineProps(["post"]);
-const router = useRouter();
-const blogSvc = new BlogService();
-function goToEditPost(): void {
-  router.push({
-    name: "editPost",
-    params: {
-      post: props.post.id,
+export default defineComponent({
+  data() {
+    return {
+      router: useRouter(),
+      blogSvc: new BlogService(),
+    }
+  },
+  props: ["post"],
+  computed:{
+    isNewPost(): boolean{
+      if(moment(this.post.createdIn).day() === moment().day()){
+        return true;
+      }
+      return false;
+    }
+  },
+  methods: {
+    goToEditPost(): void {
+      this.router.push({
+        name: "editPost",
+        params: {
+          post: this.$props.post.id,
+        },
+      });
     },
-  });
-}
-
-function goToDeletePost(): void {
- blogSvc.deletePostById(props.post.id);
-location.reload();
-}
+    goToDeletePost(): void {
+      this.blogSvc.deletePostById(this.$props.post.id);
+      location.reload();
+    }
+  }
+})
 </script>
+
 <template>
   <ui-card class="demo-card-photo">
     <ui-card-content>
@@ -35,6 +75,9 @@ location.reload();
       </div>
     </ui-card-content>
     <ui-card-actions>
+      <div v-if="isNewPost">
+        <ui-chip icon="info">Nouveau post</ui-chip>
+      </div>
       <ui-card-icons>
         <ui-icon-button @click="goToEditPost" icon="edit"></ui-icon-button>
         <ui-icon-button @click="goToDeletePost" icon="delete"></ui-icon-button>
@@ -66,10 +109,8 @@ location.reload();
 .demo-card-media-title {
   font-size: 20px;
   padding: 20px 16px;
-  background-image: linear-gradient(
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.6) 100%
-  );
+  background-image: linear-gradient(rgba(0, 0, 0, 0) 0%,
+  rgba(0, 0, 0, 0.6) 100%);
   color: white;
 }
 </style>
