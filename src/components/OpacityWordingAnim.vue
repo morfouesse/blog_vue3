@@ -1,9 +1,10 @@
 <script setup lang="ts">
-defineProps(["text"]);
+defineProps(["text","subText"]);
 </script>
 <template>
   <div>
     <h1>{{ text }}</h1>
+    <h2>Déjà {{ subText }} Pooosts !</h2>
   </div>
 </template>
 
@@ -15,6 +16,11 @@ div {
   animation: opacity-anim @opacity-dur;
   h1 {
     font-size: 60px;
+    font-family: "Bauhaus 93", sans-serif;
+  }
+  h2 {
+    font-size: 40px;
+    text-align: center;
     font-family: "Bauhaus 93", sans-serif;
   }
   @keyframes opacity-anim {

@@ -27,79 +27,70 @@
 <!--</script>-->
 
 <script lang="ts">
-import {defineComponent, ref} from "vue";
-import {BlogService} from "@/services/blog.service";
-import type {Post} from "@/constants/models";
+import { defineComponent, ref } from "vue";
+import { BlogService } from "@/services/blog.service";
+import type { Post } from "@/constants/models";
 import moment from "moment";
 import OpacityWordingAnim from "@/components/OpacityWordingAnim.vue";
 import PostCard from "@/components/PostCard.vue";
 
 export default defineComponent({
-  components: {PostCard, OpacityWordingAnim},
+  components: { PostCard },
   data() {
     return {
       blogSvc: new BlogService(),
-      postTitle: "Les Poooosts !",
       posts: ref<Post[]>([]).value,
+      postsNumber: 0,
       loading: true,
-    }
+    };
   },
+  emits:["postsNumber"],
   created() {
     this.getPosts();
   },
   watch: {
     posts(newPost: Post) {
       if (newPost) {
+        this.$emit("postsNumber",this.postsNumber);
         this.loading = false;
       }
-    }
+    },
   },
   methods: {
     getPosts(): void {
       this.blogSvc.getPosts().then((response) => {
+        this.postsNumber = response.data.length;
         this.posts = response.data.sort((a, b) =>
-            moment(b.createdIn).diff(moment(a.createdIn))
+          moment(b.createdIn).diff(moment(a.createdIn))
         );
       });
-    }
-  }
-})
+    },
+  },
+});
 </script>
 
-
 <template>
-  <div class="flex-content">
-
-    <opacity-wording-anim :text="postTitle"></opacity-wording-anim>
-    <div class="post-list">
-      <div v-if="loading">
-        <ui-spinner active></ui-spinner>
-      </div>
-      <div v-for="post in posts" :key="post.id">
-        <div class="post">
-          <post-card :post="post"></post-card>
-        </div>
+  <div class="post-list">
+    <div v-if="loading">
+      <ui-spinner active></ui-spinner>
+    </div>
+    <div v-for="post in posts" :key="post.id">
+      <div class="post">
+        <post-card :post="post"></post-card>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped lang="less">
-.flex-content {
-  flex-direction: column;
+.post-list {
+  padding-top: 50px;
+  flex-wrap: wrap;
   display: flex;
-  align-items: center;
+  justify-content: center;
 
-  .post-list {
-    padding-top: 50px;
-    flex-wrap: wrap;
-    display: flex;
-    justify-content: center;
-
-    .post {
-      margin: 10px;
-    }
+  .post {
+    margin: 10px;
   }
 }
-
 </style>

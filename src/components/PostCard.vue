@@ -87,14 +87,16 @@ export default defineComponent({
 </template>
 <style scoped lang="less">
 
-  .new-post{
-    background: rgb(2,0,36);
-    background: linear-gradient(90deg, rgba(2,0,36,1) 16%, rgba(9,9,121,1) 43%, rgba(50,50,226,1) 68%);
-    .new-post-chip{
-      background-color: #0A00FFF9;
+.new-post {
+  background: rgb(2, 0, 36);
+  background: linear-gradient(90deg, rgba(2, 0, 36, 1) 16%, rgba(9, 9, 121, 1) 43%, rgba(50, 50, 226, 1) 68%);
 
-    }
+  .new-post-chip {
+    background-color: #0A00FFF9;
+
   }
+}
+
 .demo-card-photo {
   width: 300px;
 
@@ -110,9 +112,10 @@ export default defineComponent({
   justify-content: flex-end;
 }
 
-  .new-post-body{
-    color: white;
-  }
+.new-post-body {
+  color: white;
+}
+
 .demo-card-subtitle {
   margin: 10px;
   overflow: hidden;
