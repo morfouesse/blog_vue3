@@ -1,6 +1,6 @@
 <script>
 import {useRouter} from "vue-router";
-import {RoutePath} from "@/constants/routePath";
+import {RoutePath} from "@/constants/RoutePath";
 import HelloWorld from "@/components/HelloWorld.vue";
 
 

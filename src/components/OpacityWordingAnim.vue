@@ -1,13 +1,15 @@
 <script setup lang="ts">
 defineProps({
   text: {type: String, required: true},
-  subText: {type: Number, required: true}
+  subText: {type: Number, required: false}
 });
 </script>
 <template>
   <div>
     <h1>{{ text }}</h1>
+    <div v-if="subText">
     <h2>Déjà {{ subText }} Pooosts !</h2>
+    </div>
   </div>
 </template>
 

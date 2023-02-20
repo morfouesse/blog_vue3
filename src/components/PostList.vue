@@ -28,16 +28,16 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import { BlogService } from "@/services/blog.service";
-import type { Post } from "@/constants/models";
+import { BlogService } from "@/services/Blog.service";
+import type { Post } from "@/constants/Models";
 import moment from "moment";
-import OpacityWordingAnim from "@/components/OpacityWordingAnim.vue";
 import PostCard from "@/components/PostCard.vue";
 
 export default defineComponent({
   components: { PostCard },
   data() {
     return {
+      isEditPost: false,
       blogSvc: new BlogService(),
       posts: ref<Post[]>([]).value,
       postsNumber: 0,
@@ -80,7 +80,7 @@ export default defineComponent({
     </div>
     <div v-for="post in posts" :key="post.id">
       <div class="post">
-        <post-card :post="post"></post-card>
+        <post-card :post="post" :is-edit-post="isEditPost"></post-card>
       </div>
     </div>
   </div>

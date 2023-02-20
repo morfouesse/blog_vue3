@@ -1,6 +1,6 @@
 import axios, { type AxiosResponse } from "axios";
-import { Endpoints } from "@/constants/endpoints";
-import type { Post } from "@/constants/models";
+import { Endpoints } from "@/constants/Endpoints";
+import type { Post } from "@/constants/Models";
 
 export class BlogService {
   public async getPosts(): Promise<AxiosResponse<Post[]>> {

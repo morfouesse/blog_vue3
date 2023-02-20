@@ -24,11 +24,13 @@
 <script lang="ts">
 import {defineComponent, type PropType} from "vue";
 import {useRouter} from "vue-router";
-import {BlogService} from "@/services/blog.service";
+import {BlogService} from "@/services/Blog.service";
 import moment from "moment";
-import type {Post} from "@/constants/models";
+import type {Post} from "@/constants/Models";
+
 
 export default defineComponent({
+
   data() {
     return {
       router: useRouter(),
@@ -39,6 +41,10 @@ export default defineComponent({
     post: {
       type: Object as PropType<Post>,
     },
+    isEditPost: {
+      type: Boolean,
+      required: true
+    }
   },
   computed: {
     isNewPost(): boolean {
@@ -85,8 +91,8 @@ export default defineComponent({
         <ui-chip icon="info" class="new-post-chip">Nouveau post</ui-chip>
       </div>
       <ui-card-icons>
-        <ui-icon-button @click="goToEditPost" icon="edit"></ui-icon-button>
-        <ui-icon-button @click="goToDeletePost" icon="delete"></ui-icon-button>
+        <ui-icon-button :disabled="isEditPost" @click="goToEditPost" icon="edit"></ui-icon-button>
+        <ui-icon-button :disabled="isEditPost" @click="goToDeletePost" icon="delete"></ui-icon-button>
       </ui-card-icons>
     </ui-card-actions>
   </ui-card>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {ref} from "vue";
-import {RoutePath} from "@/constants/routePath";
+import {RoutePath} from "@/constants/RoutePath";
 import {useRouter} from "vue-router";
 const type = ref(0);
 const title = ref("wwoooooaaw");

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import TopSideNavBar from "@/components/TopSideNavBar.vue";
 import TopPhoneBar from "@/components/TopPhoneBar.vue";
-import { UtilsService } from "@/services/utils.service";
+import { UtilsService } from "@/services/Utils.service";
 
 const utilsSvc = new UtilsService();
 const type = utilsSvc.useBreakpoints();

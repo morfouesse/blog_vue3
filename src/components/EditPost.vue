@@ -38,25 +38,26 @@
 
 <script lang="ts">
 import OpacityWordingAnim from "@/components/OpacityWordingAnim.vue";
-import {BlogService} from "@/services/blog.service";
-import {defineComponent, ref} from "vue";
-import type {Post} from "@/constants/models";
+import { BlogService } from "@/services/Blog.service";
+import { defineComponent, ref } from "vue";
+import type { Post } from "@/constants/Models";
 import moment from "moment";
-import {RoutePath} from "@/constants/routePath";
+import { RoutePath } from "@/constants/RoutePath";
 import PostCard from "@/components/PostCard.vue";
-import {UtilsService} from "@/services/utils.service";
+import { UtilsService } from "@/services/Utils.service";
 
 const blogSvc = new BlogService();
 const utilsSvc = new UtilsService();
 export default defineComponent({
-  components: {PostCard, OpacityWordingAnim},
+  components: { PostCard, OpacityWordingAnim },
   data() {
     return {
+      isEditPost: true,
       pageTitle: "change ton post !",
       postTitle: "Titre",
       postBody: "Description",
       postButton: "Modifier",
-      post: ref<Post>( {
+      post: ref<Post>({
         id: Number(this.$router.currentRoute.value.params.post),
         title: "",
         body: "",
@@ -74,13 +75,13 @@ export default defineComponent({
       this.$router.push(RoutePath.POSTS);
     },
     getPostById() {
-      blogSvc.getPostById(Number(this.$router.currentRoute.value.params.post)).then(
-          post => this.post = post.data
-      );
+      blogSvc
+        .getPostById(Number(this.$router.currentRoute.value.params.post))
+        .then((post) => (this.post = post.data));
       return this.post;
-    }
-  }
-})
+    },
+  },
+});
 </script>
 
 <template>
@@ -97,19 +98,19 @@ export default defineComponent({
             </div>
             <div class="input input-description">
               <ui-textfield
-                  input-type="textarea"
-                  rows="4"
-                  cols="25"
-                  v-model="post.body"
-                  outlined
+                input-type="textarea"
+                rows="4"
+                cols="25"
+                v-model="post.body"
+                outlined
               >
                 {{ postBody }}
               </ui-textfield>
             </div>
             <div class="button">
               <ui-button
-                  raised
-                  :disabled="post.title.length === 0 || post.body.length === 0"
+                raised
+                :disabled="post.title.length === 0 || post.body.length === 0"
               >
                 <span @click="modifyPost" class="button-text">
                   {{ postButton }}
@@ -120,7 +121,7 @@ export default defineComponent({
         </form>
       </div>
       <div>
-        <PostCard :post="post"></PostCard>
+        <PostCard :post="post" :is-edit-post="isEditPost"></PostCard>
       </div>
     </div>
   </div>
