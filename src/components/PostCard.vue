@@ -22,42 +22,48 @@
 <!--</script>-->
 
 <script lang="ts">
-import {defineComponent} from "vue";
+import {defineComponent, type PropType} from "vue";
 import {useRouter} from "vue-router";
 import {BlogService} from "@/services/blog.service";
 import moment from "moment";
+import type {Post} from "@/constants/models";
 
 export default defineComponent({
   data() {
     return {
       router: useRouter(),
       blogSvc: new BlogService(),
-    }
+    };
   },
-  props: ["post"],
-  computed:{
-    isNewPost(): boolean{
-      if(moment(this.post.createdIn).day() === moment().day()){
-        return true;
-      }
-      return false;
-    }
+  props: {
+    post: {
+      type: Object as PropType<Post>,
+    },
+  },
+  computed: {
+    isNewPost(): boolean {
+      return (
+          !!this.post && moment(this.post.createdIn).day() === moment().day()
+      );
+    },
   },
   methods: {
     goToEditPost(): void {
       this.router.push({
         name: "editPost",
         params: {
-          post: this.$props.post.id,
+          post: this.post?.id,
         },
       });
     },
     goToDeletePost(): void {
-      this.blogSvc.deletePostById(this.$props.post.id);
+      if (this.post) {
+        this.blogSvc.deletePostById(this.post.id);
+      }
       location.reload();
-    }
-  }
-})
+    },
+  },
+});
 </script>
 
 <template>
@@ -70,7 +76,7 @@ export default defineComponent({
           </div>
         </ui-card-media-content>
       </ui-card-media>
-      <div class="demo-card-subtitle" :class="{'new-post-body': isNewPost}">
+      <div class="demo-card-subtitle" :class="{ 'new-post-body': isNewPost }">
         {{ post.body }}
       </div>
     </ui-card-content>
@@ -86,20 +92,20 @@ export default defineComponent({
   </ui-card>
 </template>
 <style scoped lang="less">
-
 .new-post {
   background: rgb(2, 0, 36);
-  background: linear-gradient(90deg, rgba(2, 0, 36, 1) 16%, rgba(9, 9, 121, 1) 43%, rgba(50, 50, 226, 1) 68%);
+  background: linear-gradient(90deg,
+  rgba(2, 0, 36, 1) 16%,
+  rgba(9, 9, 121, 1) 43%,
+  rgba(50, 50, 226, 1) 68%);
 
   .new-post-chip {
-    background-color: #0A00FFF9;
-
+    background-color: #0a00fff9;
   }
 }
 
 .demo-card-photo {
   width: 300px;
-
 }
 
 .demo-card-media {

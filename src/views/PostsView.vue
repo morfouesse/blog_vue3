@@ -18,7 +18,7 @@ export default defineComponent({
   <main>
     <div class="flex-content">
       <OpacityWordingAnim :text="postTitle" :subText="postsNumber"></OpacityWordingAnim>
-      <PostList @postsNumber="(number) => postsNumber = number"></PostList>
+      <PostList @postsNumber="(number) => postsNumber = number.postsNumber"></PostList>
     </div>
   </main>
 </template>

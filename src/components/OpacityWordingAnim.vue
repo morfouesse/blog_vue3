@@ -1,5 +1,8 @@
 <script setup lang="ts">
-defineProps(["text","subText"]);
+defineProps({
+  text: {type: String, required: true},
+  subText: {type: Number, required: true}
+});
 </script>
 <template>
   <div>

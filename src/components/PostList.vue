@@ -44,14 +44,18 @@ export default defineComponent({
       loading: true,
     };
   },
-  emits:["postsNumber"],
+  emits: {
+    postsNumber(payload: {postsNumber: number}): number{
+      return payload.postsNumber;
+    }
+  },
   created() {
     this.getPosts();
   },
   watch: {
     posts(newPost: Post) {
       if (newPost) {
-        this.$emit("postsNumber",this.postsNumber);
+        this.$emit("postsNumber",{postsNumber: this.postsNumber});
         this.loading = false;
       }
     },
