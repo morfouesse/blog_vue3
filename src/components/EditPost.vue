@@ -52,6 +52,9 @@ export default defineComponent({
   components: { PostCard, OpacityWordingAnim },
   data() {
     return {
+      maxlengthTextField: 20,
+      titleErrorMessage: "",
+      bodyErrorMessage: "",
       isEditPost: true,
       pageTitle: "change ton post !",
       postTitle: "Titre",
@@ -65,6 +68,33 @@ export default defineComponent({
       }).value,
     };
   },
+  computed: {
+    title(): string {
+      return this.post.title;
+    },
+    body(): string {
+      return this.post.body;
+    },
+  },
+  watch: {
+    title() {
+      if (this.post.title.length === 0) {
+        this.titleErrorMessage = "Veuillez crée un titre.";
+      } else if(this.post.title.length >= this.maxlengthTextField){
+        this.titleErrorMessage = "maximum 20 caractères.";
+      }
+      else {
+        this.titleErrorMessage = "";
+      }
+    },
+    body() {
+      if (this.post.body.length === 0) {
+        this.bodyErrorMessage = "Veuillez crée une description.";
+      } else {
+        this.bodyErrorMessage = "";
+      }
+    },
+  },
   created() {
     this.post = this.getPostById();
   },
@@ -74,7 +104,7 @@ export default defineComponent({
       blogSvc.putPost(this.post);
       this.$router.push(RoutePath.POSTS);
     },
-    getPostById() {
+    getPostById(): Post {
       blogSvc
         .getPostById(Number(this.$router.currentRoute.value.params.post))
         .then((post) => (this.post = post.data));
@@ -92,9 +122,12 @@ export default defineComponent({
         <form>
           <div class="inputs">
             <div class="input">
-              <ui-textfield v-model="post.title" outlined>
+              <ui-textfield v-model="post.title" :maxlength="maxlengthTextField" outlined>
                 {{ postTitle }}
               </ui-textfield>
+          <div v-if="titleErrorMessage.length !== 0" >
+            {{ titleErrorMessage }}
+          </div>
             </div>
             <div class="input input-description">
               <ui-textfield
@@ -106,13 +139,22 @@ export default defineComponent({
               >
                 {{ postBody }}
               </ui-textfield>
+              <div v-if="bodyErrorMessage.length !== 0">
+                {{ bodyErrorMessage }}
+              </div>
             </div>
             <div class="button">
               <ui-button
                 raised
-                :disabled="post.title.length === 0 || post.body.length === 0"
+                :disabled="
+                  !(
+                    titleErrorMessage.length === 0 &&
+                    bodyErrorMessage.length === 0
+                  )
+                "
+                @click="modifyPost"
               >
-                <span @click="modifyPost" class="button-text">
+                <span class="button-text">
                   {{ postButton }}
                 </span>
               </ui-button>
@@ -156,12 +198,12 @@ export default defineComponent({
         }
 
         .input-description {
-          margin-top: 90px;
+          margin-top: 120px;
           position: absolute;
         }
 
         .button {
-          margin-top: 75%;
+          margin-top: 100%;
 
           .button-text {
             color: white;
