@@ -27,9 +27,9 @@
 <!--</script>-->
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
-import { BlogService } from "@/services/Blog.service";
-import type { Post } from "@/constants/Models";
+import {defineComponent, ref} from "vue";
+import {BlogService} from "@/services/Blog.service";
+import type {Post} from "@/constants/Models";
 import moment from "moment";
 import PostCard from "@/components/PostCard.vue";
 
@@ -47,7 +47,7 @@ export default defineComponent({
   emits: {
     postsNumber(payload: {postsNumber: number}): number{
       return payload.postsNumber;
-    }
+    },
   },
   created() {
     this.getPosts();
@@ -58,7 +58,7 @@ export default defineComponent({
         this.$emit("postsNumber",{postsNumber: this.postsNumber});
         this.loading = false;
       }
-    },
+    }
   },
   methods: {
     getPosts(): void {

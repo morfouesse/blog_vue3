@@ -27,12 +27,13 @@ import {useRouter} from "vue-router";
 import {BlogService} from "@/services/Blog.service";
 import moment from "moment";
 import type {Post} from "@/constants/Models";
-
+import emitter from "@/events/emitter";
 
 export default defineComponent({
 
   data() {
     return {
+      isDeleted: false,
       router: useRouter(),
       blogSvc: new BlogService(),
     };
@@ -49,7 +50,7 @@ export default defineComponent({
   computed: {
     isNewPost(): boolean {
       return (
-          !!this.post && moment(this.post.createdIn).day() === moment().day()
+          !!this.post && moment(this.post.createdIn).isSame(moment(),"day")
       );
     },
   },
@@ -64,9 +65,10 @@ export default defineComponent({
     },
     goToDeletePost(): void {
       if (this.post) {
+        this.isDeleted = true;
+        emitter.emit("isDeleted", { isDeleted: this.isDeleted });
         this.blogSvc.deletePostById(this.post.id);
       }
-      location.reload();
     },
   },
 });
@@ -75,13 +77,14 @@ export default defineComponent({
 <template>
   <ui-card class="demo-card-photo">
     <ui-card-content :class="{ 'new-post': isNewPost }">
-      <ui-card-media square class="demo-card-media">
+      <div>
+        <img :src="post.image ? '../src/assets/' + post.image : '../src/assets/logo.svg'">
         <ui-card-media-content class="demo-card-title">
           <div class="demo-card-media-title">
             {{ post.title }}
           </div>
         </ui-card-media-content>
-      </ui-card-media>
+      </div>
       <div class="demo-card-subtitle" :class="{ 'new-post-body': isNewPost }">
         {{ post.body }}
       </div>

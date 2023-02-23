@@ -40,11 +40,12 @@
 import OpacityWordingAnim from "@/components/OpacityWordingAnim.vue";
 import { BlogService } from "@/services/Blog.service";
 import { defineComponent, ref } from "vue";
-import type { Post } from "@/constants/Models";
+import type {FileUi, Post} from "@/constants/Models";
 import moment from "moment";
 import { RoutePath } from "@/constants/RoutePath";
 import PostCard from "@/components/PostCard.vue";
 import { UtilsService } from "@/services/Utils.service";
+import {useEvent} from "balm-ui";
 
 const blogSvc = new BlogService();
 const utilsSvc = new UtilsService();
@@ -52,13 +53,16 @@ export default defineComponent({
   components: { PostCard, OpacityWordingAnim },
   data() {
     return {
+      balmUI: useEvent(),
+      files: ref<FileUi[]>([]).value,
       maxlengthTextField: 20,
       titleErrorMessage: "",
       bodyErrorMessage: "",
       isEditPost: true,
+      fileText: "Télécharger",
       pageTitle: "change ton post !",
-      postTitle: "Titre",
-      postBody: "Description",
+      postTitle: "Titre *",
+      postBody: "Description *",
       postButton: "Modifier",
       post: ref<Post>({
         id: Number(this.$router.currentRoute.value.params.post),
@@ -93,6 +97,9 @@ export default defineComponent({
       } else {
         this.bodyErrorMessage = "";
       }
+    },
+    files(){
+      this.post.image = this.files[0].name;
     },
   },
   created() {
@@ -143,7 +150,11 @@ export default defineComponent({
                 {{ bodyErrorMessage }}
               </div>
             </div>
-            <div class="button">
+            <div class="buttons">
+            <div class="button-file">
+              <ui-file accept="image/*" @change="balmUI.onChange('files', $event)" :text="fileText" outlined></ui-file>
+            {{ post.image }}
+            </div>
               <ui-button
                 raised
                 :disabled="
@@ -202,9 +213,12 @@ export default defineComponent({
           position: absolute;
         }
 
-        .button {
+        .buttons {
           margin-top: 100%;
 
+          .button-file{
+            margin-bottom: 80px;
+          }
           .button-text {
             color: white;
           }
