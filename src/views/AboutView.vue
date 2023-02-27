@@ -6,14 +6,14 @@ const ABOUT = ref("Bienvenuuuue !");
 
 </script>
 <template>
-  <div class="flex-content">
+  <div class="column-page">
 
   <opacity-wording-anim :text="ABOUT"></opacity-wording-anim>
   </div>
 </template>
 
 <style scoped lang="less">
-.flex-content{
+.column-page{
   flex-direction: column;
   display: flex;
   align-items: center;

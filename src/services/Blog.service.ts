@@ -15,9 +15,19 @@ export class BlogService {
         return await axios.delete(Endpoints.DELETE_POST_BY_ID.replace("{post}", String(id)));
     }
 
+    public async postPost(post: Post): Promise<AxiosResponse<Post>>{
+        return await axios.post(
+            Endpoints.POST_POST,
+            post,
+            {
+                headers: {"content-type": "application/json"}
+            }
+        );
+    }
+
   public async putPost(post: Post): Promise<AxiosResponse<Post>>{
     return await axios.put(
-      Endpoints.PUT_POSTS.replace("{post}", String(post.id)),
+      Endpoints.PUT_POST.replace("{post}", String(post.id)),
       post,
         {
           headers: {"content-type": "application/json"}

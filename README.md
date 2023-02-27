@@ -55,3 +55,8 @@ npm install -g json-server
 ```sh
 json-server --watch db.json
 ```
+
+### Event listener to communicate between grandchild and parent
+```sh
+npm install --save mitt
+```

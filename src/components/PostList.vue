@@ -32,6 +32,7 @@ import {BlogService} from "@/services/Blog.service";
 import type {Post} from "@/constants/Models";
 import moment from "moment";
 import PostCard from "@/components/PostCard.vue";
+import emitter from "@/events/emitter";
 
 export default defineComponent({
   components: { PostCard },
@@ -42,20 +43,40 @@ export default defineComponent({
       posts: ref<Post[]>([]).value,
       postsNumber: 0,
       loading: true,
+      isDeleted: false,
+      isCreated: false,
     };
   },
-  emits: {
-    postsNumber(payload: {postsNumber: number}): number{
-      return payload.postsNumber;
-    },
-  },
   created() {
+    // stop listening on createOrSeePosts component
+    emitter.on(
+        "isDeleted",
+        (isDeleted) => (this.isDeleted = isDeleted as boolean)
+    );
+    emitter.on(
+        "isCreated",
+        (isCreated) => (this.isCreated = isCreated as boolean)
+    );
+    if(!this.isCreated && !this.isDeleted){
     this.getPosts();
+    }
   },
   watch: {
+    isDeleted(){
+      console.log(this.isDeleted)
+      if(this.isDeleted){
+        this.getPosts();
+      }
+    },
+    isCreated(){
+      console.log("created ",this.isCreated)
+      if(this.isCreated){
+        this.getPosts();
+      }
+    },
     posts(newPost: Post) {
       if (newPost) {
-        this.$emit("postsNumber",{postsNumber: this.postsNumber});
+        emitter.emit("postsNumber",this.postsNumber);
         this.loading = false;
       }
     }
@@ -88,7 +109,7 @@ export default defineComponent({
 
 <style scoped lang="less">
 .post-list {
-  padding-top: 50px;
+  padding-top: 5px;
   flex-wrap: wrap;
   display: flex;
   justify-content: center;

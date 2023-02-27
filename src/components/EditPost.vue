@@ -37,20 +37,23 @@
 <!--</script>-->
 
 <script lang="ts">
-import OpacityWordingAnim from "@/components/OpacityWordingAnim.vue";
-import { BlogService } from "@/services/Blog.service";
-import { defineComponent, ref } from "vue";
+import {BlogService} from "@/services/Blog.service";
+import {defineComponent, ref} from "vue";
 import type {FileUi, Post} from "@/constants/Models";
 import moment from "moment";
-import { RoutePath } from "@/constants/RoutePath";
+import {RoutePath} from "@/constants/RoutePath";
 import PostCard from "@/components/PostCard.vue";
-import { UtilsService } from "@/services/Utils.service";
+import {UtilsService} from "@/services/Utils.service";
 import {useEvent} from "balm-ui";
+import mitt from "mitt";
+import emitter from "@/events/emitter";
 
 const blogSvc = new BlogService();
 const utilsSvc = new UtilsService();
 export default defineComponent({
-  components: { PostCard, OpacityWordingAnim },
+  // necessary because keepAlive need it for "include" parameter
+  name: "EditPost",
+  components: {PostCard},
   data() {
     return {
       balmUI: useEvent(),
@@ -58,14 +61,11 @@ export default defineComponent({
       maxlengthTextField: 20,
       titleErrorMessage: "",
       bodyErrorMessage: "",
-      isEditPost: true,
       fileText: "Télécharger",
-      pageTitle: "change ton post !",
       postTitle: "Titre *",
       postBody: "Description *",
       postButton: "Modifier",
       post: ref<Post>({
-        id: Number(this.$router.currentRoute.value.params.post),
         title: "",
         body: "",
         createdIn: "",
@@ -73,6 +73,12 @@ export default defineComponent({
     };
   },
   computed: {
+    isEditPost(): boolean {
+      if (this.$router.currentRoute.value.params.post) {
+        return true
+      }
+      return false;
+    },
     title(): string {
       return this.post.title;
     },
@@ -82,80 +88,101 @@ export default defineComponent({
   },
   watch: {
     title() {
+     this.checkTitleError();
+    },
+    body() {
+      this.checkBodyError();
+    },
+    files() {
+      this.post.image = this.files[0].name;
+    },
+  },
+  created() {
+    if (this.isEditPost) {
+      this.post = this.getPostById();
+    } else {
+      this.checkTitleError();
+      this.checkBodyError();
+    }
+  },
+  methods: {
+    checkTitleError(): void{
       if (this.post.title.length === 0) {
         this.titleErrorMessage = "Veuillez crée un titre.";
-      } else if(this.post.title.length >= this.maxlengthTextField){
+      } else if (this.post.title.length >= this.maxlengthTextField) {
         this.titleErrorMessage = "maximum 20 caractères.";
-      }
-      else {
+      } else {
         this.titleErrorMessage = "";
       }
     },
-    body() {
+    checkBodyError(): void{
       if (this.post.body.length === 0) {
         this.bodyErrorMessage = "Veuillez crée une description.";
       } else {
         this.bodyErrorMessage = "";
       }
     },
-    files(){
-      this.post.image = this.files[0].name;
-    },
-  },
-  created() {
-    this.post = this.getPostById();
-  },
-  methods: {
-    modifyPost() {
+    submitPost(): void {
       this.post.createdIn = moment().format(utilsSvc.formatDateHourSecond());
-      blogSvc.putPost(this.post);
+      if (this.isEditPost) {
+        this.post.id = Number(this.$router.currentRoute.value.params.post);
+        blogSvc.putPost(this.post);
       this.$router.push(RoutePath.POSTS);
+      } else {
+        blogSvc.postPost(this.post);
+        emitter.emit("isCreated",true);
+      }
+      this.resetForm();
     },
     getPostById(): Post {
       blogSvc
-        .getPostById(Number(this.$router.currentRoute.value.params.post))
-        .then((post) => (this.post = post.data));
+          .getPostById(Number(this.$router.currentRoute.value.params.post))
+          .then((post) => (this.post = post.data));
       return this.post;
     },
+    resetForm(): void {
+      this.post.title = "";
+      this.post.body = "";
+      this.post.image = "";
+    }
   },
 });
 </script>
 
 <template>
-  <div class="column-content">
-    <opacity-wording-anim :text="pageTitle"></opacity-wording-anim>
-    <div class="row-content" v-if="post">
-      <div class="flex-form">
-        <form>
-          <div class="inputs">
-            <div class="input">
-              <ui-textfield v-model="post.title" :maxlength="maxlengthTextField" outlined>
-                {{ postTitle }}
-              </ui-textfield>
-          <div v-if="titleErrorMessage.length !== 0" >
-            {{ titleErrorMessage }}
-          </div>
+  <div class="row-content">
+    <div class="flex-form">
+      <form>
+        <div class="inputs">
+          <div class="input">
+            <ui-textfield v-model="post.title" :maxlength="maxlengthTextField" outlined>
+              {{ postTitle }}
+            </ui-textfield>
+            <div v-if="titleErrorMessage.length !== 0">
+              {{ titleErrorMessage }}
             </div>
-            <div class="input input-description">
-              <ui-textfield
+          </div>
+          <div class="input input-description">
+            <ui-textfield
                 input-type="textarea"
                 rows="4"
                 cols="25"
                 v-model="post.body"
                 outlined
-              >
-                {{ postBody }}
-              </ui-textfield>
-              <div v-if="bodyErrorMessage.length !== 0">
-                {{ bodyErrorMessage }}
-              </div>
+            >
+              {{ postBody }}
+            </ui-textfield>
+            <div v-if="bodyErrorMessage.length !== 0">
+              {{ bodyErrorMessage }}
             </div>
-            <div class="buttons">
+          </div>
+          <div class="buttons">
             <div class="button-file">
-              <ui-file accept="image/*" @change="balmUI.onChange('files', $event)" :text="fileText" outlined></ui-file>
-            {{ post.image }}
+              <ui-file accept="image/*" @change="balmUI.onChange('files', $event)" :text="fileText"
+                       outlined></ui-file>
+              {{ post.image }}
             </div>
-              <ui-button
+            <ui-button
                 raised
                 :disabled="
                   !(
@@ -163,68 +190,64 @@ export default defineComponent({
                     bodyErrorMessage.length === 0
                   )
                 "
-                @click="modifyPost"
-              >
+                @click="submitPost"
+            >
                 <span class="button-text">
                   {{ postButton }}
                 </span>
-              </ui-button>
-            </div>
+            </ui-button>
           </div>
-        </form>
-      </div>
-      <div>
-        <PostCard :post="post" :is-edit-post="isEditPost"></PostCard>
-      </div>
+        </div>
+      </form>
+    </div>
+    <div>
+      <PostCard :post="post" :is-edit-post="isEditPost"></PostCard>
     </div>
   </div>
 </template>
 
 <style scoped lang="less">
-.column-content {
-  gap: 150px;
-  flex-direction: column;
+
+
+.row-content {
+  flex-direction: row;
+  gap: 400px;
   display: flex;
-  align-items: center;
+  justify-content: space-around;
 
-  .row-content {
-    flex-direction: row;
-    gap: 400px;
+  .flex-form {
+    flex-direction: column;
     display: flex;
-    justify-content: space-around;
+    align-items: center;
 
-    .flex-form {
+    .inputs {
       flex-direction: column;
       display: flex;
-      align-items: center;
+      margin-right: 14%;
+      margin-top: 5%;
 
-      .inputs {
-        flex-direction: column;
-        display: flex;
-        margin-right: 14%;
-        margin-top: 5%;
+      .input {
+        margin-bottom: 50px;
+      }
 
-        .input {
-          margin-bottom: 50px;
+      .input-description {
+        margin-top: 120px;
+        position: absolute;
+      }
+
+      .buttons {
+        margin-top: 100%;
+
+        .button-file {
+          margin-bottom: 80px;
         }
 
-        .input-description {
-          margin-top: 120px;
-          position: absolute;
-        }
-
-        .buttons {
-          margin-top: 100%;
-
-          .button-file{
-            margin-bottom: 80px;
-          }
-          .button-text {
-            color: white;
-          }
+        .button-text {
+          color: white;
         }
       }
     }
   }
 }
+
 </style>

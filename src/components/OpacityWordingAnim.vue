@@ -1,15 +1,11 @@
 <script setup lang="ts">
 defineProps({
   text: {type: String, required: true},
-  subText: {type: Number, required: false}
 });
 </script>
 <template>
   <div>
     <h1>{{ text }}</h1>
-    <div v-if="subText">
-    <h2>Déjà {{ subText }} Pooosts !</h2>
-    </div>
   </div>
 </template>
 
@@ -22,11 +18,7 @@ div {
   h1 {
     font-size: 60px;
     font-family: "Bauhaus 93", sans-serif;
-  }
-  h2 {
-    font-size: 40px;
     text-align: center;
-    font-family: "Bauhaus 93", sans-serif;
   }
   @keyframes opacity-anim {
     0% {

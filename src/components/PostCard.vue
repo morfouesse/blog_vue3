@@ -64,10 +64,10 @@ export default defineComponent({
       });
     },
     goToDeletePost(): void {
-      if (this.post) {
+      if (this.post && this.post.id) {
         this.isDeleted = true;
-        emitter.emit("isDeleted", { isDeleted: this.isDeleted });
         this.blogSvc.deletePostById(this.post.id);
+        emitter.emit("isDeleted", { isDeleted: this.isDeleted });
       }
     },
   },
@@ -115,10 +115,6 @@ export default defineComponent({
 
 .demo-card-photo {
   width: 300px;
-}
-
-.demo-card-media {
-  background-image: url("../assets/logo.svg");
 }
 
 .demo-card-title {
