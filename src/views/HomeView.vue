@@ -1,32 +1,27 @@
 <script>
-import {useRouter} from "vue-router";
-import {RoutePath} from "@/constants/RoutePath";
+import { useRouter } from "vue-router";
+import { RoutePath } from "@/constants/RoutePath";
 import HelloWorld from "@/components/HelloWorld.vue";
 
-
 export default {
-  components: {HelloWorld},
+  components: { HelloWorld },
   data() {
     return {
       router: useRouter(),
-    }
-  }
-  ,
+    };
+  },
   methods: {
     goToHome() {
       this.router.push(RoutePath.HOME);
-    }
-    ,
+    },
     goToAbout() {
       this.router.push(RoutePath.ABOUT);
-    }
-    ,
+    },
     goToPosts() {
       this.router.push(RoutePath.POSTS);
-    }
-  }
-
-}
+    },
+  },
+};
 </script>
 <!--<script setup lang="ts">-->
 <!--import HelloWorld from "@/components/HelloWorld.vue";-->
@@ -48,15 +43,15 @@ export default {
 <template>
   <main>
     <img
-        alt="Vue logo"
-        class="logo"
-        src="@/assets/logo.svg"
-        width="125"
-        height="125"
+      alt="Vue logo"
+      class="logo"
+      src="@/assets/logo.svg"
+      width="125"
+      height="125"
     />
 
     <div class="wrapper">
-      <HelloWorld msg="You did it!"/>
+      <HelloWorld msg="You did it!" />
 
       <nav>
         <a @click="goToHome">Home</a>
@@ -65,7 +60,6 @@ export default {
       </nav>
     </div>
   </main>
-
 </template>
 
 <style scoped lang="less">
@@ -76,7 +70,6 @@ main {
   display: flex;
   justify-content: center;
   line-height: 1.5;
-
 
   .logo {
     display: block;

@@ -37,15 +37,14 @@
 <!--</script>-->
 
 <script lang="ts">
-import {BlogService} from "@/services/Blog.service";
-import {defineComponent, ref} from "vue";
-import type {FileUi, Post} from "@/constants/Models";
+import { BlogService } from "@/services/Blog.service";
+import { defineComponent, ref } from "vue";
+import type { FileUi, Post } from "@/constants/Models";
 import moment from "moment";
-import {RoutePath} from "@/constants/RoutePath";
+import { RoutePath } from "@/constants/RoutePath";
 import PostCard from "@/components/PostCard.vue";
-import {UtilsService} from "@/services/Utils.service";
-import {useEvent} from "balm-ui";
-import mitt from "mitt";
+import { UtilsService } from "@/services/Utils.service";
+import { useEvent } from "balm-ui";
 import emitter from "@/events/emitter";
 
 const blogSvc = new BlogService();
@@ -53,7 +52,7 @@ const utilsSvc = new UtilsService();
 export default defineComponent({
   // necessary because keepAlive need it for "include" parameter
   name: "EditPost",
-  components: {PostCard},
+  components: { PostCard },
   data() {
     return {
       balmUI: useEvent(),
@@ -74,10 +73,7 @@ export default defineComponent({
   },
   computed: {
     isEditPost(): boolean {
-      if (this.$router.currentRoute.value.params.post) {
-        return true
-      }
-      return false;
+      return !!this.$router.currentRoute.value.params.post;
     },
     title(): string {
       return this.post.title;
@@ -88,7 +84,7 @@ export default defineComponent({
   },
   watch: {
     title() {
-     this.checkTitleError();
+      this.checkTitleError();
     },
     body() {
       this.checkBodyError();
@@ -106,7 +102,7 @@ export default defineComponent({
     }
   },
   methods: {
-    checkTitleError(): void{
+    checkTitleError(): void {
       if (this.post.title.length === 0) {
         this.titleErrorMessage = "Veuillez crée un titre.";
       } else if (this.post.title.length >= this.maxlengthTextField) {
@@ -115,7 +111,7 @@ export default defineComponent({
         this.titleErrorMessage = "";
       }
     },
-    checkBodyError(): void{
+    checkBodyError(): void {
       if (this.post.body.length === 0) {
         this.bodyErrorMessage = "Veuillez crée une description.";
       } else {
@@ -127,27 +123,31 @@ export default defineComponent({
       if (this.isEditPost) {
         this.post.id = Number(this.$router.currentRoute.value.params.post);
         blogSvc.putPost(this.post);
-      this.$router.push(RoutePath.POSTS);
+        this.$router.push(RoutePath.POSTS);
       } else {
         // Done in the OnComplete promise because the listener listen too fast, so
         // the GET is done before the POST
-        blogSvc.postPost(this.post).then().catch().then(
-            () => {  emitter.emit("isCreated",true);}
-        );
+        blogSvc
+          .postPost(this.post)
+          .then()
+          .catch()
+          .then(() => {
+            emitter.emit("isCreated", true);
+          });
       }
       this.resetForm();
     },
     getPostById(): Post {
       blogSvc
-          .getPostById(Number(this.$router.currentRoute.value.params.post))
-          .then((post) => (this.post = post.data));
+        .getPostById(Number(this.$router.currentRoute.value.params.post))
+        .then((post) => (this.post = post.data));
       return this.post;
     },
     resetForm(): void {
       this.post.title = "";
       this.post.body = "";
       this.post.image = "";
-    }
+    },
   },
 });
 </script>
@@ -158,7 +158,11 @@ export default defineComponent({
       <form>
         <div class="inputs">
           <div class="input">
-            <ui-textfield v-model="post.title" :maxlength="maxlengthTextField" outlined>
+            <ui-textfield
+              v-model="post.title"
+              :maxlength="maxlengthTextField"
+              outlined
+            >
               {{ postTitle }}
             </ui-textfield>
             <div v-if="titleErrorMessage.length !== 0">
@@ -167,11 +171,11 @@ export default defineComponent({
           </div>
           <div class="input input-description">
             <ui-textfield
-                input-type="textarea"
-                rows="4"
-                cols="25"
-                v-model="post.body"
-                outlined
+              input-type="textarea"
+              rows="4"
+              cols="25"
+              v-model="post.body"
+              outlined
             >
               {{ postBody }}
             </ui-textfield>
@@ -181,23 +185,27 @@ export default defineComponent({
           </div>
           <div class="buttons">
             <div class="button-file">
-              <ui-file accept="image/*" @change="balmUI.onChange('files', $event)" :text="fileText"
-                       outlined></ui-file>
+              <ui-file
+                accept="image/*"
+                @change="balmUI.onChange('files', $event)"
+                :text="fileText"
+                outlined
+              ></ui-file>
               {{ post.image }}
             </div>
             <ui-button
-                raised
-                :disabled="
-                  !(
-                    titleErrorMessage.length === 0 &&
-                    bodyErrorMessage.length === 0
-                  )
-                "
-                @click="submitPost"
+              raised
+              :disabled="
+                !(
+                  titleErrorMessage.length === 0 &&
+                  bodyErrorMessage.length === 0
+                )
+              "
+              @click="submitPost"
             >
-                <span class="button-text">
-                  {{ postButton }}
-                </span>
+              <span class="button-text">
+                {{ postButton }}
+              </span>
             </ui-button>
           </div>
         </div>
@@ -210,8 +218,6 @@ export default defineComponent({
 </template>
 
 <style scoped lang="less">
-
-
 .row-content {
   flex-direction: row;
   gap: 400px;
@@ -252,5 +258,4 @@ export default defineComponent({
     }
   }
 }
-
 </style>

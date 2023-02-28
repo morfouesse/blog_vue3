@@ -27,9 +27,9 @@
 <!--</script>-->
 
 <script lang="ts">
-import {defineComponent, ref} from "vue";
-import {BlogService} from "@/services/Blog.service";
-import type {Post} from "@/constants/Models";
+import { defineComponent, ref } from "vue";
+import { BlogService } from "@/services/Blog.service";
+import type { Post } from "@/constants/Models";
 import moment from "moment";
 import PostCard from "@/components/PostCard.vue";
 import emitter from "@/events/emitter";
@@ -50,36 +50,34 @@ export default defineComponent({
   created() {
     // stop listening on createOrSeePosts component
     emitter.on(
-        "isDeleted",
-        (isDeleted) => (this.isDeleted = isDeleted as boolean)
+      "isDeleted",
+      (isDeleted) => (this.isDeleted = isDeleted as boolean)
     );
     emitter.on(
-        "isCreated",
-        (isCreated) => (this.isCreated = isCreated as boolean)
+      "isCreated",
+      (isCreated) => (this.isCreated = isCreated as boolean)
     );
-    if(!this.isCreated && !this.isDeleted){
-    this.getPosts();
+    if (!this.isCreated && !this.isDeleted) {
+      this.getPosts();
     }
   },
   watch: {
-    isDeleted(){
-      console.log(this.isDeleted)
-      if(this.isDeleted){
+    isDeleted() {
+      if (this.isDeleted) {
         this.getPosts();
       }
     },
-    isCreated(){
-      console.log("created ",this.isCreated)
-      if(this.isCreated){
+    isCreated() {
+      if (this.isCreated) {
         this.getPosts();
       }
     },
     posts(newPost: Post) {
       if (newPost) {
-        emitter.emit("postsNumber",this.postsNumber);
+        emitter.emit("postsNumber", this.postsNumber);
         this.loading = false;
       }
-    }
+    },
   },
   methods: {
     getPosts(): void {
