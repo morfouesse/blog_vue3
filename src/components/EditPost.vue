@@ -129,8 +129,11 @@ export default defineComponent({
         blogSvc.putPost(this.post);
       this.$router.push(RoutePath.POSTS);
       } else {
-        blogSvc.postPost(this.post);
-        emitter.emit("isCreated",true);
+        // Done in the OnComplete promise because the listener listen too fast, so
+        // the GET is done before the POST
+        blogSvc.postPost(this.post).then().catch().then(
+            () => {  emitter.emit("isCreated",true);}
+        );
       }
       this.resetForm();
     },

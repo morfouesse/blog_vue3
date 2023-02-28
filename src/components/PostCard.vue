@@ -66,8 +66,12 @@ export default defineComponent({
     goToDeletePost(): void {
       if (this.post && this.post.id) {
         this.isDeleted = true;
-        this.blogSvc.deletePostById(this.post.id);
-        emitter.emit("isDeleted", { isDeleted: this.isDeleted });
+        // Done in the OnComplete promise because the listener listen too fast, so
+        // the GET is done before the DELETE
+        this.blogSvc.deletePostById(this.post.id).then().catch().then(
+            () => { emitter.emit("isDeleted", { isDeleted: this.isDeleted });}
+        );
+
       }
     },
   },
