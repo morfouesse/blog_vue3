@@ -1,11 +1,10 @@
-<script>
-import { useRouter } from "vue-router";
-import { RoutePath } from "@/constants/RoutePath";
+<script lang="ts">
 import HelloWorld from "@/components/HelloWorld.vue";
+import {defineComponent} from "vue";
 
-export default {
+export default defineComponent({
   components: { HelloWorld },
-};
+});
 </script>
 <!--<script setup lang="ts">-->
 <!--import HelloWorld from "@/components/HelloWorld.vue";-->
