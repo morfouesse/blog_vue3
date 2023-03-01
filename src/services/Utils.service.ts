@@ -13,7 +13,6 @@ export class UtilsService {
       if (windowWidth.value >= 1200) return "lg";
       return null; // This is an unreachable line, simply to keep eslint happy.
     });
-
     return type;
   }
 

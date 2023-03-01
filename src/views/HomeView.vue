@@ -5,22 +5,6 @@ import HelloWorld from "@/components/HelloWorld.vue";
 
 export default {
   components: { HelloWorld },
-  data() {
-    return {
-      router: useRouter(),
-    };
-  },
-  methods: {
-    goToHome() {
-      this.router.push(RoutePath.HOME);
-    },
-    goToAbout() {
-      this.router.push(RoutePath.ABOUT);
-    },
-    goToPosts() {
-      this.router.push(RoutePath.POSTS);
-    },
-  },
 };
 </script>
 <!--<script setup lang="ts">-->
@@ -28,17 +12,6 @@ export default {
 <!--import {useRouter} from "vue-router";-->
 <!--import {RoutePath} from "@/constants/routePath";-->
 
-<!--const router = useRouter();-->
-
-<!--function goToPosts(): void {-->
-<!--  router.push(RoutePath.POSTS);-->
-<!--}-->
-<!--function goToHome(): void {-->
-<!--  router.push(RoutePath.HOME);-->
-<!--}-->
-<!--function goToAbout(): void {-->
-<!--  router.push(RoutePath.ABOUT);-->
-<!--}-->
 <!--</script>-->
 <template>
   <main>
@@ -52,12 +25,6 @@ export default {
 
     <div class="wrapper">
       <HelloWorld msg="You did it!" />
-
-      <nav>
-        <a @click="goToHome">Home</a>
-        <a @click="goToAbout">About</a>
-        <a @click="goToPosts">Le blog</a>
-      </nav>
     </div>
   </main>
 </template>

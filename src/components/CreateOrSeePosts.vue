@@ -2,18 +2,18 @@
 import PostList from "@/components/PostList.vue";
 import { defineComponent } from "vue";
 import emitter from "@/events/emitter";
-import EditPost from "@/components/EditPost.vue";
+import EditAndCreatePost from "@/components/EditAndCreatePost.vue";
 import { SelectedChips } from "@/constants/Enums";
 
 export default defineComponent({
-  components: { EditPost, PostList },
+  components: { EditAndCreatePost, PostList },
   data() {
     return {
       selectedChips: "PostList",
       chips: [
         // we need component name because we use KeepAlive component
         { label: "La liste des posts", value: "PostList" },
-        { label: "Créer un post", value: "EditPost" },
+        { label: "Créer un post", value: "EditAndCreatePost" },
       ],
       isCreated: false,
       postsNumber: 0,
@@ -66,7 +66,7 @@ export default defineComponent({
       <h2>Déjà {{ postsNumber }} Pooosts !</h2>
     </div>
   </div>
-  <KeepAlive include="EditPost">
+  <KeepAlive include="EditAndCreatePost">
     <component :is="selectedChips"></component>
   </KeepAlive>
 </template>

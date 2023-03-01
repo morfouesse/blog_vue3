@@ -39,7 +39,7 @@ export default defineComponent({
     post: {
       type: Object as PropType<Post>,
     },
-    isEditPost: {
+    diseableIcons: {
       type: Boolean,
       required: true,
     },
@@ -104,12 +104,12 @@ export default defineComponent({
       </div>
       <ui-card-icons>
         <ui-icon-button
-          :disabled="isEditPost"
+          :disabled="diseableIcons"
           @click="goToEditPost"
           icon="edit"
         ></ui-icon-button>
         <ui-icon-button
-          :disabled="isEditPost"
+          :disabled="diseableIcons"
           @click="deletePost"
           icon="delete"
         ></ui-icon-button>
@@ -148,7 +148,7 @@ export default defineComponent({
 
 .demo-card-subtitle {
   margin: 10px;
-  overflow: hidden;
+  word-wrap: break-word;
   height: 50px;
 }
 

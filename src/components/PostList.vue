@@ -33,12 +33,22 @@ import type { Post } from "@/constants/Models";
 import moment from "moment";
 import PostCard from "@/components/PostCard.vue";
 import emitter from "@/events/emitter";
+import {UtilsService} from "@/services/Utils.service";
+import {ScreenType} from "@/constants/Enums";
 
+const utilsSvc = new UtilsService();
 export default defineComponent({
+  computed: {
+    ScreenType() {
+      return ScreenType
+    }
+  },
+
   components: { PostCard },
   data() {
     return {
-      isEditPost: false,
+      screenType: utilsSvc.useBreakpoints(),
+      diseableIcons: false,
       blogSvc: new BlogService(),
       posts: ref<Post[]>([]).value,
       postsNumber: 0,
@@ -93,13 +103,13 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="post-list">
+  <div class="post-list" :style="screenType !== ScreenType.LG ? 'padding-bottom: 100px;' : ''">
     <div v-if="loading">
       <ui-spinner active></ui-spinner>
     </div>
     <div v-for="post in posts" :key="post.id">
       <div class="post">
-        <post-card :post="post" :is-edit-post="isEditPost"></post-card>
+        <post-card :post="post" :diseable-icons="diseableIcons"></post-card>
       </div>
     </div>
   </div>

@@ -1,18 +1,19 @@
 <script setup lang="ts">
 import TopSideNavBar from "@/components/TopSideNavBar.vue";
-import TopPhoneBar from "@/components/TopPhoneBar.vue";
+import TopPhoneBar from "@/components/BottomPhoneBar.vue";
 import { UtilsService } from "@/services/Utils.service";
+import {ScreenType} from "@/constants/Enums";
 
 const utilsSvc = new UtilsService();
-const type = utilsSvc.useBreakpoints();
+const screenType = utilsSvc.useBreakpoints();
 
 </script>
 <template>
   <div class="page">
-    <div v-if="type === 'lg'">
+    <div v-if="screenType === ScreenType.LG">
       <TopSideNavBar></TopSideNavBar>
     </div>
-    <div v-if="type === 'md' || type === 'xs'">
+    <div v-if="screenType === ScreenType.MD || screenType === ScreenType.XS">
       <TopPhoneBar></TopPhoneBar>
     </div>
     <RouterView class="space"></RouterView>
