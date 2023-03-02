@@ -33,15 +33,15 @@ import type { Post } from "@/constants/Models";
 import moment from "moment";
 import PostCard from "@/components/PostCard.vue";
 import emitter from "@/events/emitter";
-import {UtilsService} from "@/services/Utils.service";
-import {ScreenType} from "@/constants/Enums";
+import { UtilsService } from "@/services/Utils.service";
+import { ScreenType } from "@/constants/Enums";
 
 const utilsSvc = new UtilsService();
 export default defineComponent({
   computed: {
     ScreenType() {
-      return ScreenType
-    }
+      return ScreenType;
+    },
   },
 
   components: { PostCard },
@@ -103,24 +103,54 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="post-list" :style="screenType !== ScreenType.LG ? 'padding-bottom: 100px;' : ''">
-    <div v-if="loading">
+    <div v-if="loading" class="loader">
       <ui-spinner active></ui-spinner>
     </div>
-    <div v-for="post in posts" :key="post.id">
-      <div class="post">
-        <post-card :post="post" :diseable-icons="diseableIcons"></post-card>
+    <transition-group tag="div" name="list"
+    class="post-list"
+    :style="screenType !== ScreenType.LG ? 'padding-bottom: 100px;' : ''"
+  >
+      <div class="post" v-for="post in posts" :key="post.id">
+          <post-card :post="post" :diseable-icons="diseableIcons"></post-card>
       </div>
-    </div>
-  </div>
+    </transition-group>
 </template>
 
 <style scoped lang="less">
+.loader{
+  display: flex;
+  justify-content: center;
+}
 .post-list {
   padding-top: 5px;
   flex-wrap: wrap;
   display: flex;
   justify-content: center;
+
+  .list-enter-from{
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  .list-enter-to{
+    opacity: 1;
+    transform: scale(1);
+  }
+  .list-enter-active {
+    transition: all 0.4s ease;
+  }
+
+  .list-leave-from{
+    opacity: 1;
+    transform: scale(1);
+  }
+  .list-leave-to{
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  .list-leave-active{
+    transition: all 0.4s ease;
+  }
+
 
   .post {
     margin: 10px;

@@ -62,8 +62,8 @@ export default defineComponent({
         v-model="selectedChips"
       ></ui-chips>
     </div>
-    <div v-if="postsNumber">
-      <h2>Déjà {{ postsNumber }} Pooosts !</h2>
+    <div>
+      <h2>Déjà <span class="post-number">{{ postsNumber }}</span> Pooosts !</h2>
     </div>
   </div>
   <KeepAlive include="EditAndCreatePost">
@@ -71,7 +71,7 @@ export default defineComponent({
   </KeepAlive>
 </template>
 
-<style scoped>
+<style lang="less" scoped>
 .row-page {
   display: flex;
   flex-direction: row;
@@ -79,5 +79,11 @@ export default defineComponent({
   gap: 10px;
   margin-left: 35px;
   margin-top: 80px;
+
+  .post-number{
+    font-weight: bold;
+    font-size: 28px;
+
+  }
 }
 </style>
